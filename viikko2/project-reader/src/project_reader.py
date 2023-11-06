@@ -15,6 +15,10 @@ class ProjectReader:
         data = toml.loads(content)
         name = data["tool"]["poetry"]["name"]
         description = data["tool"]["poetry"]["description"]
+        license = data["tool"]["poetry"]["license"]
+        authors = []
+        for key in data["tool"]["poetry"]["authors"]:
+            authors.append(key)
         dependencies = []
         for key in data["tool"]["poetry"]["dependencies"]:
             dependencies.append(key)
@@ -22,4 +26,4 @@ class ProjectReader:
         for key in data["tool"]["poetry"]["group"]["dev"]["dependencies"]:
             dev_dependencies.append(key)
 
-        return Project(name, description, dependencies, dev_dependencies)
+        return Project(name, description, license, authors, dependencies, dev_dependencies)
