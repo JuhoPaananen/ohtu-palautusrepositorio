@@ -39,3 +39,9 @@ Go To Main Page
 
 Go To Register Page
     Go To  ${REGISTER_URL}
+
+Go To Ohtu Page
+    Go To  ${MAIN_URL}
+
+Logout User
+    Click Button  Logout

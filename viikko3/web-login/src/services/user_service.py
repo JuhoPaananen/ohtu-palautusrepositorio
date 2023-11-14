@@ -50,6 +50,9 @@ class UserService:
         if not re.match(self._password_pattern, password):
             raise UserInputError("Invalid password, at least 8 characters and one special character required")
 
+        if password != password_confirmation:
+            raise UserInputError("Password and password confirmation do not match")
+
         if self._user_repository.find_by_username(username):
             raise UserInputError("Username already exists")
 
