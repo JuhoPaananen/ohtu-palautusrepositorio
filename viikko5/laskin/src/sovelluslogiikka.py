@@ -1,6 +1,8 @@
 class Sovelluslogiikka:
     def __init__(self, arvo=0):
         self._arvo = arvo
+        self._edelliset_arvot = []
+        self._edelliset_arvot.append(arvo)
 
     def miinus(self, operandi):
         self._arvo = self._arvo - operandi

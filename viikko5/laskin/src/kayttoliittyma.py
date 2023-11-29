@@ -7,8 +7,12 @@ class Summa:
         self.lue_syote = lue_syote
 
     def suorita(self):
+        self.sovellus._edelliset_arvot.append(self.sovellus.arvo())
         arvo = self.lue_syote()
         self.sovellus.plus(arvo)
+
+    def kumoa(self):
+        self.sovellus.aseta_arvo(self.sovellus._edelliset_arvot.pop())
 
 class Erotus:
     def __init__(self, sovellus, lue_syote):
@@ -16,8 +20,12 @@ class Erotus:
         self.lue_syote = lue_syote
 
     def suorita(self):
+        self.sovellus._edelliset_arvot.append(self.sovellus.arvo())
         arvo = self.lue_syote()
         self.sovellus.miinus(arvo)
+
+    def kumoa(self):
+        self.sovellus.aseta_arvo(self.sovellus._edelliset_arvot.pop())
 
 class Nollaus:
     def __init__(self, sovellus, lue_syote):
@@ -25,7 +33,11 @@ class Nollaus:
         self.lue_syote = lue_syote
 
     def suorita(self):
+        self.sovellus._edelliset_arvot.append(self.sovellus.arvo())
         self.sovellus.nollaa()
+
+    def kumoa(self):
+        self.sovellus.aseta_arvo(self.sovellus._edelliset_arvot.pop())
 
 
 class Komento(Enum):
@@ -39,6 +51,7 @@ class Kayttoliittyma:
     def __init__(self, sovellus, root):
         self._sovellus = sovellus
         self._root = root
+        self._edelliset_komennot = []
 
         self._komennot = {
             Komento.SUMMA: Summa(self._sovellus, self._lue_syote),
@@ -90,15 +103,25 @@ class Kayttoliittyma:
         return int(self._syote_kentta.get())
 
     def _suorita_komento(self, komento):
-        komento_olio = self._komennot[komento]
-        komento_olio.suorita()
-        
-        self._kumoa_painike["state"] = constants.NORMAL
+        if komento != Komento.KUMOA:
+            komento_olio = self._komennot[komento]
+            komento_olio.suorita()
+            print(self._sovellus.arvo())
+            self._edelliset_komennot.append(komento_olio)
+            self._kumoa_painike["state"] = constants.NORMAL
+        else:
+            if self._edelliset_komennot:
+                viimeisin_komento = self._edelliset_komennot.pop()
+                viimeisin_komento.kumoa()
+                print(self._sovellus.arvo())
+                if not self._edelliset_komennot:
+                    self._kumoa_painike["state"] = constants.DISABLED
 
         if self._sovellus.arvo() == 0:
             self._nollaus_painike["state"] = constants.DISABLED
         else:
             self._nollaus_painike["state"] = constants.NORMAL
 
-        self._syote_kentta.delete(0, constants.END)
         self._arvo_var.set(self._sovellus.arvo())
+        self._syote_kentta.delete(0, constants.END)
+        
