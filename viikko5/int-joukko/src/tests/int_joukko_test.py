@@ -23,9 +23,9 @@ class TestIntJoukko(unittest.TestCase):
             joukko.lisaa(luku)
 
         self.assertEqual(joukko.mahtavuus(), 14)
-        self.assertTrue(joukko.kuuluu(11))
+        self.assertTrue(joukko.numero_listassa(11))
         joukko.poista(11)
-        self.assertFalse(joukko.kuuluu(11))
+        self.assertFalse(joukko.numero_listassa(11))
         self.assertEqual(joukko.mahtavuus(), 13)
 
     def test_lukuja_lisatty_maara(self):
@@ -38,13 +38,13 @@ class TestIntJoukko(unittest.TestCase):
         self.assertEqual(self.joukko.mahtavuus(), 2)
 
     def test_vain_lisatyt_luvut_loytyvat(self):
-        self.assertTrue(self.joukko.kuuluu(10))
-        self.assertFalse(self.joukko.kuuluu(5))
-        self.assertTrue(self.joukko.kuuluu(3))
+        self.assertTrue(self.joukko.numero_listassa(10))
+        self.assertFalse(self.joukko.numero_listassa(5))
+        self.assertTrue(self.joukko.numero_listassa(3))
 
     def test_poistettu_ei_ole_enaa_joukossa(self):
         self.joukko.poista(3)
-        self.assertFalse(self.joukko.kuuluu(3))
+        self.assertFalse(self.joukko.numero_listassa(3))
         self.assertEqual(self.joukko.mahtavuus(), 1)
 
     def test_palautetaan_oikea_taulukko(self):
